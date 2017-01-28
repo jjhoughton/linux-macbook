@@ -4,8 +4,8 @@
 # Maintainer: Tony Lambiris <tony@critialstack.com>
 
 pkgbase=linux-macbook
-_srcname=linux-4.8
-pkgver=4.8.16
+_srcname=linux-4.9
+pkgver=4.9.6
 pkgrel=1
 arch=('i686' 'x86_64')
 url="https://www.kernel.org/"
@@ -33,9 +33,9 @@ source=("https://www.kernel.org/pub/linux/kernel/v4.x/${_srcname}.tar.xz"
         net_handle_no_dst_on_skb_in_icmp6_send.patch
         )
 
-sha256sums=('3e9150065f193d3d94bcf46a1fe9f033c7ef7122ab71d75a7fb5a2f0c9a7e11a'
+sha256sums=('029098dcffab74875e086ae970e3828456838da6e0ba22ce3f64ef764f3d7f1a'
             'SKIP'
-            'e9f2af4023ddf126045599805053efa804b35e6b3e86f05b6301a01bf8735bb8'
+            'cd0d5ea27c487a7d1354ba3e80f85af4924b77ad1180f1fbfaf6844ae03c8728'
             'SKIP'
             '1e72cd2e9e1fa8bf1478f7a7d9b9719d1fd2d1754dbe915a6b6d7e0d0a92da0a'
             '8646ab1d39f1755de240a27dd1970be39b8b81b1f1caca0dd77c0a4b157292d9'
@@ -44,7 +44,7 @@ sha256sums=('3e9150065f193d3d94bcf46a1fe9f033c7ef7122ab71d75a7fb5a2f0c9a7e11a'
             '72f0b3ce04f33dfae305297bd045fba8cb5e5c8594ffd7a68a4d8ed293b1b1b5'
             '1256b241cd477b265a3c2d64bdc19ffe3c9bbcee82ea3994c590c2c76e767d99'
             'bb8af32880059e681396a250d8e78f600f248da8ad4f0e76d7923badb5ee8b42'
-            '4d4a622733c2ba742256f369c32a1e98fc216966589f260c7457d299dbb55971'
+            'dc2179b8fa310c038cad2b1b00e6bfb6c1db3f56a987ce2a690538693d1d9234'
             '09189eb269a9fd16898cf90a477df23306236fb897791e8d04e5a75d5007bbff'
             'c0a25b413bc542472868c63318213dfe788beeece750d15f7ff1568aca8968ec'
             '1256b241cd477b265a3c2d64bdc19ffe3c9bbcee82ea3994c590c2c76e767d99'
@@ -63,7 +63,8 @@ prepare() {
   patch -p1 -i "${srcdir}/patch-${pkgver}"
 
   # https://bugzilla.kernel.org/show_bug.cgi?id=189851
-  patch --verbose -p1 -i "${srcdir}/net_handle_no_dst_on_skb_in_icmp6_send.patch"
+  # Note: already in the upstream kernel
+  # patch --verbose -p1 -i "${srcdir}/net_handle_no_dst_on_skb_in_icmp6_send.patch"
 
   # add latest fixes from stable queue, if needed
   # http://git.kernel.org/?p=linux/kernel/git/stable/stable-queue.git
@@ -76,7 +77,9 @@ prepare() {
   patch -p1 -F3 -i "${srcdir}/apple-gmux.patch"
   patch -p1 -F3 -i "${srcdir}/macbook-suspend.patch"
   patch -p1 -F3 -i "${srcdir}/poweroff-quirk-workaround.patch"
-  patch -p1 -F3 -i "${srcdir}/intel-pstate-backport.patch"
+
+  # Note: already upstream as 09c448d3c61f3
+  # patch -p1 -F3 -i "${srcdir}/intel-pstate-backport.patch"
 
   if [ "${CARCH}" = "x86_64" ]; then
     cat "${srcdir}/config.x86_64" > ./.config
